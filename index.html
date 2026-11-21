@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="StudentHub — organize tasks, focus sessions and study goals.">
+  <meta name="theme-color" content="#6558d9">
+  <title>StudentHub | Your study space</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="authScreen" class="auth-screen">
+    <section class="auth-art">
+      <div class="brand brand-light"><span class="brand-mark">✦</span> StudentHub</div>
+      <div class="auth-art-copy">
+        <span class="eyebrow">YOUR SPACE TO GROW</span>
+        <h1>Small steps.<br><em>Big progress.</em></h1>
+        <p>Plan your day, protect your focus, and make every study session count.</p>
+        <div class="art-orbit"><div class="orbit-dot">✦</div><div class="orbit-card card-one">✓ &nbsp; Assignment done</div><div class="orbit-card card-two">◷ &nbsp; Focus mode</div><div class="orbit-card card-three">↗ &nbsp; You're improving</div></div>
+      </div>
+      <div class="auth-art-footer">A calmer way to get things done.</div>
+    </section>
+    <section class="auth-panel">
+      <div class="auth-mobile-brand brand"><span class="brand-mark">✦</span> StudentHub</div>
+      <div class="auth-box">
+        <div class="auth-tabs" role="tablist">
+          <button class="auth-tab active" data-auth-tab="login" type="button">Log in</button>
+          <button class="auth-tab" data-auth-tab="register" type="button">Create account</button>
+        </div>
+        <div id="loginFormWrap">
+          <span class="eyebrow">WELCOME BACK</span>
+          <h2>Good to see you.</h2>
+          <p class="auth-subtitle">Pick up where you left off.</p>
+          <form id="loginForm" class="auth-form">
+            <label>Email address<input id="loginEmail" type="email" autocomplete="username" placeholder="you@example.com" required></label>
+            <label>Password<input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password" required></label>
+            <button class="btn btn-primary btn-full" type="submit">Log in <span>→</span></button>
+          </form>
+          <p class="auth-switch">New to StudentHub? <button type="button" data-switch="register">Create an account</button></p>
+        </div>
+        <div id="registerFormWrap" class="hidden">
+          <span class="eyebrow">GET STARTED</span>
+          <h2>Create your space.</h2>
+          <p class="auth-subtitle">Your next chapter starts here.</p>
+          <form id="registerForm" class="auth-form">
+            <label>Your name<input id="registerName" type="text" maxlength="45" autocomplete="name" placeholder="e.g. Alex" required></label>
+            <label>Email address<input id="registerEmail" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+            <label>Password<input id="registerPassword" type="password" minlength="6" autocomplete="new-password" placeholder="At least 6 characters" required></label>
+            <button class="btn btn-primary btn-full" type="submit">Create account <span>→</span></button>
+          </form>
+          <p class="auth-switch">Already have an account? <button type="button" data-switch="login">Log in</button></p>
+        </div>
+        <p id="authMessage" class="message" role="status" aria-live="polite"></p>
+        <p class="demo-note">Demo version: accounts are stored only in this browser. Don't use a real or reused password.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="appScreen" class="app-screen hidden">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="StudentHub home"><span class="brand-mark">✦</span> StudentHub</a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="side-nav">
+        <button class="nav-link active" data-view="overview"><span>▦</span> Overview</button>
+        <button class="nav-link" data-view="tasks"><span>☷</span> My tasks <span class="nav-count" id="navTaskCount">0</span></button>
+        <button class="nav-link" data-view="focus"><span>◷</span> Focus room</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-tip"><span class="tip-spark">✦</span><strong>Keep showing up.</strong><p>Progress is built one focused session at a time.</p></div>
+        <button id="logoutBtn" class="logout-btn"><span>↪</span> Log out</button>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button id="menuBtn" class="icon-btn menu-btn" aria-label="Toggle menu">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumbCurrent">Overview</strong></div>
+        <div class="top-actions">
+          <button id="themeBtn" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">☼</button>
+          <div class="user-chip"><div class="avatar" id="userAvatar">S</div><span id="userName">Student</span></div>
+        </div>
+      </header>
+
+      <section id="overviewView" class="view">
+        <div class="page-heading">
+          <div><span class="eyebrow" id="greetingEyebrow">YOUR STUDY SPACE</span><h1 id="greetingTitle">Let's make today count.</h1><p>Here's your progress at a glance. Keep the momentum going.</p></div>
+          <div class="today-pill" id="todayPill"></div>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>Tasks planned</span><span class="stat-icon purple">☷</span></div><strong id="statTotal">0</strong><small>Across all your deadlines</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Completed</span><span class="stat-icon green">✓</span></div><strong id="statDone">0</strong><small id="statDoneHint">Every step counts</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Focus minutes</span><span class="stat-icon orange">◷</span></div><strong id="statMinutes">0</strong><small>Total focused time</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Completion</span><span class="stat-icon blue">↗</span></div><strong id="statPercent">0%</strong><small>Of all your tasks</small></article>
+        </div>
+        <div class="dashboard-grid">
+          <section class="panel tasks-panel">
+            <div class="panel-heading"><div><h2>Today's priorities</h2><p>Focus on what matters next.</p></div><button class="text-btn" data-go="tasks">View all →</button></div>
+            <div id="overviewTasks" class="task-list"></div>
+          </section>
+          <section class="panel focus-panel">
+            <div class="panel-heading"><div><h2>Focus room</h2><p>Make space for deep work.</p></div><span class="soft-tag">POMODORO</span></div>
+            <div class="mini-timer">
+              <div class="timer-ring" id="miniTimerRing"><div><strong id="miniTimerDisplay">25:00</strong><small id="miniTimerLabel">FOCUS SESSION</small></div></div>
+            </div>
+            <div class="timer-actions"><button id="miniStartBtn" class="btn btn-primary">Start focus</button><button id="miniResetBtn" class="btn btn-quiet">Reset</button></div>
+            <button class="text-btn centered" data-go="focus">Customize timer →</button>
+          </section>
+          <section class="panel progress-panel">
+            <div class="panel-heading"><div><h2>Your progress</h2><p>A little better every day.</p></div><span class="progress-emoji">✦</span></div>
+            <div class="progress-line-label"><span>Tasks completed</span><strong id="progressLabel">0 / 0</strong></div>
+            <div class="progress-track"><div id="overviewProgressBar"></div></div>
+            <p class="progress-foot" id="progressFoot">Add a task to start tracking your progress.</p>
+          </section>
+          <section class="quote-card"><span>✦ A NOTE FOR TODAY</span><blockquote id="dailyQuote">“You don't have to see the whole staircase. Just take the first step.”</blockquote><small>ONE STEP AT A TIME</small></section>
+        </div>
+      </section>
+
+      <section id="tasksView" class="view hidden">
+        <div class="page-heading compact"><div><span class="eyebrow">STAY ORGANIZED</span><h1>My tasks</h1><p>Capture it, prioritize it, get it done.</p></div></div>
+        <section class="panel task-manager">
+          <div class="panel-heading"><div><h2>Add a task</h2><p>Break big goals into manageable steps.</p></div></div>
+          <form id="taskForm" class="task-form">
+            <label class="field-grow">Task name<input id="taskTitle" type="text" maxlength="100" placeholder="e.g. Revise Java arrays" required></label>
+            <label>Due date<input id="taskDue" type="date" required></label>
+            <label>Category<select id="taskCategory"><option>Study</option><option>Assignment</option><option>Project</option><option>Personal</option></select></label>
+            <label>Priority<select id="taskPriority"><option>Normal</option><option>High</option><option>Low</option></select></label>
+            <button class="btn btn-primary add-task-btn" type="submit">＋ Add task</button>
+          </form>
+          <div class="task-toolbar"><div class="filter-tabs"><button class="filter-btn active" data-filter="all">All tasks</button><button class="filter-btn" data-filter="pending">Pending</button><button class="filter-btn" data-filter="completed">Completed</button></div><div class="task-search"><span>⌕</span><input id="taskSearch" type="search" placeholder="Search tasks..." aria-label="Search tasks"></div></div>
+          <div id="fullTaskList" class="task-list full-task-list"></div>
+        </section>
+      </section>
+
+      <section id="focusView" class="view hidden">
+        <div class="page-heading compact"><div><span class="eyebrow">DEEP WORK MODE</span><h1>Focus room</h1><p>Choose your session length and give one thing your attention.</p></div></div>
+        <div class="focus-layout">
+          <section class="panel big-focus-panel">
+            <span class="soft-tag">YOUR PERSONAL TIMER</span>
+            <div class="big-timer-ring" id="bigTimerRing"><div><strong id="bigTimerDisplay">25:00</strong><small id="bigTimerLabel">FOCUS SESSION</small></div></div>
+            <div class="timer-actions big-actions"><button id="bigStartBtn" class="btn btn-primary">Start focus</button><button id="bigResetBtn" class="btn btn-quiet">Reset</button></div>
+            <div class="timer-settings">
+              <label>Focus minutes<input id="focusMinutes" type="number" min="1" max="180" value="25"></label>
+              <label>Break minutes<input id="breakMinutes" type="number" min="1" max="60" value="5"></label>
+              <button id="applyTimerBtn" class="btn btn-outline">Apply settings</button>
+            </div>
+            <p class="timer-hint">You can pause, reset, or switch between focus and break sessions. Your completed focus minutes are added to your dashboard.</p>
+          </section>
+          <aside class="focus-side">
+            <section class="panel"><div class="panel-heading"><div><h2>Focus tips</h2><p>Set yourself up for a good session.</p></div></div><ul class="focus-tips"><li><span>01</span> Choose one clear task.</li><li><span>02</span> Silence notifications.</li><li><span>03</span> Take a short break after focusing.</li><li><span>04</span> Repeat at your own pace.</li></ul></section>
+            <section class="panel session-summary"><span class="eyebrow">YOUR TOTAL</span><strong id="focusTotalMinutes">0</strong><p>focused minutes completed</p><div class="summary-divider"></div><strong id="focusTotalSessions">0</strong><p>completed focus sessions</p></section>
+          </aside>
+        </div>
+      </section>
+      <footer class="app-footer">StudentHub · Made for focused days <span>✦</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
