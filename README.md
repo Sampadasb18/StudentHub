@@ -10,10 +10,10 @@ A responsive student productivity dashboard built with vanilla HTML, CSS and Jav
 - Dashboard stats and task completion progress
 - Focus timer with user-configurable focus and break durations
 - Focus session and minute tracking
-- Light/dark theme
+- Light/dark theme\n- StudentHub Arcade daily milestone tracker (2/4/6/8 completed tasks unlock game cards)
 - Per-browser local data persistence with `localStorage`
 
-## Run locally
+## Arcade v1\n\nThe Arcade currently includes the daily milestone tracker and locked/unlocked game cards. Actual game implementations are planned as the next development steps. Tasks count toward the daily milestones when marked complete on that local date.\n\n## Run locally
 
 1. Extract the project folder.
 2. Open the folder in VS Code.

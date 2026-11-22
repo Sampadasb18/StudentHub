@@ -67,6 +67,7 @@
         <button class="nav-link active" data-view="overview"><span>▦</span> Overview</button>
         <button class="nav-link" data-view="tasks"><span>☷</span> My tasks <span class="nav-count" id="navTaskCount">0</span></button>
         <button class="nav-link" data-view="focus"><span>◷</span> Focus room</button>
+        <button class="nav-link arcade-nav-link" data-view="arcade"><span>🎮</span> Arcade <span class="nav-count" id="arcadeUnlockCount">0/4</span></button>
       </nav>
       <div class="sidebar-bottom">
         <div class="sidebar-tip"><span class="tip-spark">✦</span><strong>Keep showing up.</strong><p>Progress is built one focused session at a time.</p></div>
@@ -154,6 +155,26 @@
           </aside>
         </div>
       </section>
+      <section id="arcadeView" class="view hidden">
+        <div class="page-heading compact">
+          <div><span class="eyebrow">WORK HARD · PLAY SMART</span><h1>StudentHub Arcade</h1><p>Complete daily task milestones to unlock a little playtime.</p></div>
+          <div class="arcade-date" id="arcadeDate"></div>
+        </div>
+        <section class="arcade-hero">
+          <div class="arcade-hero-copy">
+            <span class="arcade-kicker">YOUR DAILY CHALLENGE</span>
+            <h2>Progress earns play.</h2>
+            <p>Finish tasks, reach milestones, and unlock your games for today.</p>
+            <div class="arcade-progress-copy"><strong id="arcadeProgressText">0 of 8 tasks completed</strong><span id="arcadeNextText">2 more to unlock Snake</span></div>
+            <div class="arcade-progress-track"><div id="arcadeProgressBar"></div></div>
+          </div>
+          <div class="arcade-hero-art" aria-hidden="true">🎮<span>✦</span><i>★</i></div>
+        </section>
+        <div class="arcade-section-heading"><div><h2>Today's rewards</h2><p>Your games unlock as you hit each milestone.</p></div><span class="arcade-reset-note">↻ Resets daily at midnight</span></div>
+        <div id="arcadeGames" class="arcade-games"></div>
+        <p class="arcade-footnote">Your task progress is based on tasks you mark complete today. Game unlocks refresh each new day; personal best scores will be saved separately when games are added.</p>
+      </section>
+
       <footer class="app-footer">StudentHub · Made for focused days <span>✦</span></footer>
     </main>
   </div>

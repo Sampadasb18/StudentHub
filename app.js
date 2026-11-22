@@ -149,7 +149,11 @@ function taskMarkup(task, compact = false) {
 function bindTaskActions(container) {
   container.querySelectorAll("[data-check]").forEach(input => input.addEventListener("change", () => {
     const task = tasks.find(t => String(t.id) === input.dataset.check);
-    if (task) { task.done = input.checked; saveData(); renderAll(); }
+    if (task) {
+      task.done = input.checked;
+      task.completedAt = input.checked ? dateKey(new Date()) : null;
+      saveData(); renderAll();
+    }
   }));
   container.querySelectorAll("[data-delete]").forEach(btn => btn.addEventListener("click", () => {
     tasks = tasks.filter(t => String(t.id) !== btn.dataset.delete);
@@ -203,9 +207,10 @@ document.querySelectorAll("[data-filter]").forEach(btn => btn.addEventListener("
 $("taskSearch").addEventListener("input", event => { searchText = event.target.value.trim().toLowerCase(); renderFullTasks(); });
 
 function switchView(view) {
-  ["overview", "tasks", "focus"].forEach(name => $(name + "View").classList.toggle("hidden", name !== view));
+  ["overview", "tasks", "focus", "arcade"].forEach(name => $(name + "View").classList.toggle("hidden", name !== view));
   document.querySelectorAll(".nav-link").forEach(b => b.classList.toggle("active", b.dataset.view === view));
-  $("breadcrumbCurrent").textContent = view === "overview" ? "Overview" : view === "tasks" ? "My tasks" : "Focus room";
+  $("breadcrumbCurrent").textContent = view === "overview" ? "Overview" : view === "tasks" ? "My tasks" : view === "arcade" ? "Arcade" : "Focus room";
+  if (view === "arcade") renderArcade();
   $("sidebar").classList.remove("open");
 }
 document.querySelectorAll("[data-view]").forEach(btn => btn.addEventListener("click", () => switchView(btn.dataset.view)));
@@ -218,6 +223,41 @@ $("themeBtn").addEventListener("click", () => {
   updateData({ theme });
 });
 
+/* StudentHub Arcade: daily task milestones (gameplay will be added in later steps). */
+const ARCADE_GAMES = [
+  { id: "snake", name: "Snake", icon: "🐍", milestone: 2, description: "A classic arcade challenge. Grow longer and beat your best score." },
+  { id: "memory", name: "Memory Match", icon: "🧠", milestone: 4, description: "Flip cards, find matching pairs, and test your memory." },
+  { id: "2048", name: "2048", icon: "🔢", milestone: 6, description: "Combine matching tiles and reach the 2048 tile." },
+  { id: "space", name: "Space Shooter", icon: "🚀", milestone: 8, description: "Pilot your ship, dodge danger, and clear the galaxy." }
+];
+function getTodayCompletedCount() {
+  const today = dateKey(new Date());
+  return tasks.filter(task => task.done && task.completedAt === today).length;
+}
+function renderArcade() {
+  const host = $("arcadeGames");
+  if (!host || !currentUser) return;
+  const count = getTodayCompletedCount();
+  const totalMilestone = ARCADE_GAMES[ARCADE_GAMES.length - 1].milestone;
+  const unlocked = ARCADE_GAMES.filter(game => count >= game.milestone).length;
+  $("arcadeDate").textContent = new Date().toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+  $("arcadeUnlockCount").textContent = `${unlocked}/4`;
+  $("arcadeProgressText").textContent = `${count} of ${totalMilestone} tasks completed today`;
+  const next = ARCADE_GAMES.find(game => count < game.milestone);
+  $("arcadeNextText").textContent = next ? `${next.milestone - count} more ${next.milestone - count === 1 ? "task" : "tasks"} to unlock ${next.name}` : "All games unlocked. Enjoy your rewards!";
+  $("arcadeProgressBar").style.width = `${Math.min(100, count / totalMilestone * 100)}%`;
+  host.innerHTML = ARCADE_GAMES.map((game, index) => {
+    const isUnlocked = count >= game.milestone;
+    const remaining = Math.max(0, game.milestone - count);
+    return `<article class="arcade-game-card ${isUnlocked ? "is-unlocked" : "is-locked"}">
+      <div class="arcade-game-art art-${game.id}"><span>${game.icon}</span><small>${String(index + 1).padStart(2, "0")}</small>${isUnlocked ? '<b>UNLOCKED</b>' : '<i class="arcade-lock">🔒</i>'}</div>
+      <div class="arcade-game-info"><div class="arcade-game-title"><h3>${game.name}</h3><span>${game.milestone} TASKS</span></div>
+        <p>${game.description}</p>
+        <div class="arcade-card-bottom">${isUnlocked ? '<button class="arcade-play-btn" type="button" disabled>Coming in next update</button>' : `<span class="arcade-locked-copy">${remaining} more ${remaining === 1 ? "task" : "tasks"} needed</span>`}</div>
+      </div>
+    </article>`;
+  }).join("");
+}
 /* Focus timer */
 function configureTimerFromData() {
   const data = getData();
